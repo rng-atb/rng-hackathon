@@ -64,26 +64,36 @@ class populate:
 
 		return r.text
 
-	def getAllTransactionsByAccount(self, bank_id=None):
-		for account in range(0, len(self.__ACCOUNTS)):
-			url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNTS[account])
-			r = requests.get(url, headers=self.__HEADER)
+	def getAllTransactionsByAccount(self, bank_id=None, account=None):
+		if account is None and self.__ACCOUNTS is None:
+			raise ValueError("You haven't entered a value for the account!")
+		elif account is not None and self.__ACCOUNTS is None:
+			self.__ACCOUNT = account
+		url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNTS[account])
+		r = requests.get(url, headers=self.__HEADER)
 
-			if (r.status_code is not 200):
-				raise Exception("Incorrect request!")
-			return r.text
+		if (r.status_code is not 200):
+			raise Exception("Incorrect request!")
+		return r.text
+
+	def getAccountsArr(self):
+		return self.__ACCOUNTS
 
 class create_data:
 
 	data_location = "data.json"
 	json_data = None
 
+	populate_data = populate()
+
 	def __init__(self):
 		with open(self.data_location, 'r') as f:
-    			self.jason_data = json.load(f)
+    			self.jason_data = json.load(f.read())
 
 	def createTransactions(self):
-		
+		for self.populate_data.getAccountsArr():
+			for label in self.jason_data:
+				self.populate_data.createTransaction(label)
 #Testing
 #p = populate()
 #print(p.getAllAccountsAtBank())
