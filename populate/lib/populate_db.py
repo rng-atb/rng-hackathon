@@ -65,10 +65,11 @@ class populate:
 		return r.text
 
 	def getAllTransactionsByAccount(self, bank_id=None, account=None):
-		if account is None and self.__ACCOUNTS is None:
-			raise ValueError("You haven't entered a value for the account!")
-		elif account is not None and self.__ACCOUNTS is None:
-			self.__ACCOUNT = account
+		self.__ACCOUNTS = account if account is not None and self.ACCOUNTS is None else \
+				raise ValueError("Incorrect account values!"
+
+		self.__BANK__ID = bank_id if self.__BANK__ID is not None and bank_id is not None
+
 		url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNTS[account])
 		r = requests.get(url, headers=self.__HEADER)
 
