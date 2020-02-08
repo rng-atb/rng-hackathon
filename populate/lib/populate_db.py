@@ -7,6 +7,7 @@
 """
 import json
 import requests
+import random
 
 class populate:
 	__BASE__URL = "https://api.leapos.ca/obp/v4.0.0/"
@@ -52,9 +53,10 @@ class populate:
 		return r.text
 
 	def createTransaction(self, description=None):
+		amount = random.randint(1, 20)
 		url = self.__BASE__URL + "banks/" + self.__BANK__ID \
 				+ "/accounts/{ACCOUNT_ID}/{VIEW_ID}/transaction-request-types/FREE_FORM/transaction-requests".format(ACCOUNT_ID=self.__ACCOUNT__ID, VIEW_ID=self.__VIEW__ID)
-		data = {"value":{"currency":"CAD","amount":"10"},"description":"This is a FREE_FORM Transaction Request"}
+		data = {"value":{"currency":"CAD","amount":amount},"description":description}
 		r = requests.post(url, data=json.dumps(data),headers=self.__HEADER.format(TOKEN=self.__TOKEN))
 
 		if (r.status_code is not 200):
@@ -65,13 +67,23 @@ class populate:
 	def getAllTransactionsByAccount(self, bank_id=None):
 		for account in range(0, len(self.__ACCOUNTS)):
 			url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNTS[account])
-			print(url)
 			r = requests.get(url, headers=self.__HEADER)
 
 			if (r.status_code is not 200):
 				raise Exception("Incorrect request!")
 			return r.text
 
+class create_data:
+
+	data_location = "data.json"
+	json_data = None
+
+	def __init__(self):
+		with open(self.data_location, 'r') as f:
+    			self.jason_data = json.load(f)
+
+	def createTransactions(self):
+		
 #Testing
 #p = populate()
 #print(p.getAllAccountsAtBank())
