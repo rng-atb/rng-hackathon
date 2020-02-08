@@ -8,13 +8,14 @@ import pymysql
 
 class populate:
 	__BASE__URL = "https://api.leapos.ca/obp/v4.0.0/"
-	__TOKEN = None
-	__USER__ID = None
+	__TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyIiOiIifQ.i6uCFJJKYmjJvj6S3XoSGvxPB1TsxtbJyCPxgtB6ZFI"
+	__USER__ID = "b4b397f4-ca49-4284-99a4-2654ef82f597"
 
-	__BANK__ID = None
-	__BRANCH__ID = None
-	__ACCOUNT__ID = []
+	__BANK__ID = "bda5596ed24e2c440db4ade11f65d34"
+	__BRANCH__ID = "271994d2-2c85-4dbe-9fb6-6cf22df7cfba"
+	__ACCOUNT__ID = ["account_1","account_2","account_3"]
 	__HEADER = {"Authorization": "DirectLogin token=\"{TOKEN}\""}
+
 
 	__SESSION = None
 
