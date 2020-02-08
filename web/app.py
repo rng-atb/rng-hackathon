@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from pusher import Pusher
 
 app = Flask(__name__)
@@ -14,6 +14,21 @@ ssl=True)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/our_endpoint', methods=['GET'])
+def our_endpoint():
+    some_arg = request.args.get("some_arg")
+    if some_arg is None:
+        print("arg some_arg was None")
+        return Response(status=400)
+    if some_arg == "option1":
+        return Response(status=200)        
+    else:
+        return Response(status=200)
+
+@app.route('/graph')
+def graph():
+    return render_template('graph.html')
 
 @app.route('/dashboard')
 def dashboard():
