@@ -1,10 +1,12 @@
 """
 * You can use a decorator class to raise Exceptions on bad requests
 
+*Get all accounts
+*Get all transactions by accounts
+
 """
 import json
 import requests
-import pymysql
 
 class populate:
 	__BASE__URL = "https://api.leapos.ca/obp/v4.0.0/"
@@ -13,85 +15,64 @@ class populate:
 
 	__BANK__ID = "bda5596ed24e2c440db4ade11f65d34"
 	__BRANCH__ID = "271994d2-2c85-4dbe-9fb6-6cf22df7cfba"
-	__ACCOUNT__ID = ["account_1","account_2","account_3"]
-	__HEADER = {"Authorization": "DirectLogin token=\"{TOKEN}\""}
+	__ACCOUNTS = ["account_1","account_2","account_3"]
 
+	__HEADER = {}
+	__VIEW__ID = "owner"
 
-	__SESSION = None
-
-	def __init__(self, token, user_id, bank_id):
-		self.__TOKEN = token
-		self.__USER__ID = user_id
-		self.__BANK__ID = bank_id
+	def __init__(self, token=None, user_id=None, bank_id=None):
+		self.__HEADER['Authorization'] = 'DirectLogin token=\"eyJhbGciOiJIUzI1NiJ9.eyIiOiIifQ.i6uCFJJKYmjJvj6S3XoSGvxPB1TsxtbJyCPxgtB6ZFI\"'
 
 	def getCurrentUser(self):
 		url = self.__BASE__URL + "users/current"
-		r = requests.get(url, json=self.__HEADER.format(TOKEN=self.__TOKEN))
+		r = requests.get(url, headers=self.__HEADER.format(TOKEN=self.__TOKEN))
 		if (r.status_code is not 200):
 			raise Exception("Incorrect request")
 		return r.text
 
 	def getAllAccountsAtBank(self, bank_id=None):
 		url = self.__BASE__URL + "banks/" + self.__BANK__ID + "/accounts"
-		r = requests.get(url, json=self.__HEADER.format(TOKEN=self.__TOKEN))
+		r = requests.get(url, headers=self.__HEADER)
 		if (r.status_code is not 200):
 			raise Exception("Incorrect request!")
 		return r.text
 
 	def getCustomersAtBank(self, bank_id=None):
 		url = self.__BASE__URL + "customers"
-		r = requests.get(url, json=self.__HEADER.format(TOKEN=self.__TOKEN))
+		r = requests.get(url, headers=self.__HEADER.format(TOKEN=self.__TOKEN))
 		if (r.status_code is not 200):
 			raise Exception("Incorrect request!")
 		return r.text
 
 	def getAccountViews(self, bank_id=None, account_id=None):
 		url = self.__BASE__URL + "banks/" + self.__BANK__ID + "/accounts/" + self.__ACCOUNT__ID + "/views"
-		r = requests.get(url, json=self.__HEADER.format(TOKEN=self.__TOKEN))
+		r = requests.get(url, headers=self.__HEADER.format(TOKEN=self.__TOKEN))
 		if (r.status_code is not 200):
 			raise Exception("Incorrect request!")
-		return r.text 
-	def createAccount(self):
-		pass
+		return r.text
 
-	def createTransactionType(self):
-		r = requests.post(self.__BASE_URL, auth=('user', 'pass'))
+	def createTransaction(self, description=None):
+		url = self.__BASE__URL + "banks/" + self.__BANK__ID \
+				+ "/accounts/{ACCOUNT_ID}/{VIEW_ID}/transaction-request-types/FREE_FORM/transaction-requests".format(ACCOUNT_ID=self.__ACCOUNT__ID, VIEW_ID=self.__VIEW__ID)
+		data = {"value":{"currency":"CAD","amount":"10"},"description":"This is a FREE_FORM Transaction Request"}
+		r = requests.post(url, data=json.dumps(data),headers=self.__HEADER.format(TOKEN=self.__TOKEN))
 
-	def createTransaction(self, metadata=None):
-		pass
+		if (r.status_code is not 200):
+			raise Exception("Incorrect request!")
 
-	def createAccount(self):
-		pass
+		return r.text
 
-	def getTransactionTypes(self):
-		pass
+	def getAllTransactionsByAccount(self, bank_id=None):
+		for account in range(0, len(self.__ACCOUNTS)):
+			url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNTS[account])
+			print(url)
+			r = requests.get(url, headers=self.__HEADER)
 
-	def getBranches(self):
-		pass
+			if (r.status_code is not 200):
+				raise Exception("Incorrect request!")
+			return r.text
 
-	def getBankProducts(self):
-		pass
-
-	def getAllAvailableRoles(self):
-		pass
-
-class randomize:
-	def __init__(self):
-		pass
-
-	def getFName(self):
-		pass
-
-	def getLName(self):
-		pass
-
-	def getAddress(self):
-		pass
-
-
-class businesses:
-	def __init__(self):
-		pass
-
-	def insertBusinessIntoDB(self):
-		pass
+#Testing
+#p = populate()
+#print(p.getAllAccountsAtBank())
+#print(p.getAllTransactionsByAccount())
