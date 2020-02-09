@@ -33,7 +33,8 @@ text {
 <script>
 
 // get the data
-d3.csv("{{ url_for('static', filename='data/account.csv') }}", function(error, links) {
+console.log("{{ 'data_path' }}")
+d3.csv("{{ url_for('static', filename=data_path) }}", function(error, links) {
 
 var nodes = {};
 

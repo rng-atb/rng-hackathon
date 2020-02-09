@@ -28,9 +28,23 @@ def our_endpoint():
     else:
         return Response(status=200)
 
-@app.route('/graph')
+@app.route('/graph', methods=['GET'])
 def graph():
-    return render_template('graph.html')
+    path = request.args.get("filepath")
+    print("the path is: {0}".format(path))
+    return render_template('graph.html', data_path=path)
+
+@app.route('/demo1')
+def demo1():
+    return render_template('graph.html', data_path="data/account.csv")
+
+@app.route('/demo2')
+def demo2():
+    return render_template('graph.html', data_path="data/account.json")
+
+@app.route('/demo3')
+def demo3():
+    return render_template('graph.html', data_path="data/force.csv")
 
 @app.route('/dashboard')
 def dashboard():
