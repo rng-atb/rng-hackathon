@@ -17,9 +17,10 @@ def generate_data(num_accounts, labels, num_lines, output=None):
             entry = "Account{0},{1},{2}".format(a, labels[r], v)
             data.append(entry)
     if output is not None:
-        with open(output, 'w') as myfile:
+        with open(output, 'w') as outfile:
+            outfile.write("source,target,value"+'\n')
             for line in data:
-                myfile.write(line+'\n')
+                outfile.write(line+'\n')
     else:
         for line in data:
             print(line)
