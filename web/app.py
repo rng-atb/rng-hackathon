@@ -46,6 +46,10 @@ def demo2():
 def demo3():
     return render_template('graph.html', data_path="data/force.csv")
 
+@app.route('/demo4')
+def demo4():
+    return render_template('graph.html', data_path="data/data.csv")
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
