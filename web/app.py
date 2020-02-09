@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, Response
 # from pusher import Pusher
+import pandas
+import json
 import os, sys
 #first change the cwd to the script path
 scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
@@ -49,7 +51,41 @@ def graph():
 @app.route('/populate')
 def populate():
     profile = Profile()
-    return render_template('graph.html', data_path="data/account.csv")
+    profile.populateProfile()
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    csv_file = "tmp.csv"
+    print(dir_path)
+    # dir_path = dir_path + "/static/data/tmp.csv"
+    profile.writeToCsv(dir_path + "/static/data/" + csv_file)
+    return render_template('jsongraph.html', data_path="data/"+csv_file)    # 
+    # df = profile.getProfile()
+    # print(df)
+    # print(type(df))
+    # # df = df.__str__()
+    # df = json.dumps(df)
+    # print(type(df)) 
+    # print(df)
+    # print("\n\n")   
+    # # df = json.loads(df.__str__())
+    # # print(type(df))
+    # df = pandas.read_json(df)
+    # print(df)
+    # df = df.to_csv()
+    # print(df)
+    # print(type(df))
+    # lines = df.splitlines()
+    # correct_csv = ""
+    # for line in lines:
+    #     # print("line: {}".format(line))
+    #     # print("\t{}".format( line[line.index(",")+1:]))
+    #     correct_csv += line[line.index(",")+1:] + "\n"
+    # print(correct_csv)
+    # # keep_col = ["source", "target", "weight"]
+    # # df = df[keep_col]
+    # # print(df)
+    # # print(profile.getProfile())
+    
+    # return render_template('jsongraph.html', data=correct_csv)
     # global prof
     # print(prof)
     #profile = Profile()
