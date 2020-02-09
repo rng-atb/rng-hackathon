@@ -104,7 +104,7 @@ var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
-    .linkDistance(function(d){ get_random_length(width); })
+    .linkDistance(width/4)
     .charge(function(d){
         var charge = -300;
         if (d.index === 0) charge = 10 * charge;
