@@ -85,6 +85,9 @@ class populate:
 			raise Exception("Incorrect request!" + str(r.status_code))
 		return json.loads(r.content)
 
+	def createAccount(self, ):
+		pass
+
 class create_data:
 	label_location = "labels.json"
 	label_data = None

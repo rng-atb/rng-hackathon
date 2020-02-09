@@ -75,10 +75,10 @@ class Profile:
                 filteredList.append(item)
         return filteredList
 
-    def createReport(self):
+    def createReportHtml(self, interest, weight):
         if(os.path.exists("index.html")):
             os.remove("index.html")
-        profiles = self.getInterestedProfiles("Learning", 1)
+        profiles = self.getInterestedProfiles(interest, weight)
         profiles.sort(key = lambda x:x['weight'], reverse = True)
         print(profiles)
         beginHTML()
@@ -96,10 +96,15 @@ class Profile:
         weightCol = [profile['weight'] for profile in profiles]
         df = pandas.DataFrame(data={"source": srcCol, "target": targetCol, "weight": weightCol})
         df.to_csv(filename, sep=',',index=False)
-            
-#profile = Profile()
-#profile.populateProfile()
-#profile.writeToCsv("data.csv")
-#profile.createReport()
-#profile.writeToFile("profiles.json")
-#print(profile.getInterestedProfiles("Learning", 7))
+
+if __name__ == "__main__":
+    interest = sys.argv[1]
+    weight = sys.argv[2]
+      
+    profile = Profile()
+    profile.populateProfile()
+    profile.createReportHtml(interest, weight)
+    #profile.writeToCsv("data.csv")
+    #profile.createReportHtml()
+    #profile.writeToFile("profiles.json")
+    #print(profile.getInterestedProfiles("Learning", 7))
