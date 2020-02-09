@@ -102,20 +102,7 @@ var scale = d3.scale.linear().range([minRadius,maxRadius]);
 // add the nodes
 node.append("circle")
     .attr("r", function(d){
-        // return d.total_children;
-        return 5;
-        // if (d.children){
-        //     console.log("case A")
-        //     return scale(d.children.length);
-        // }
-        // else if(d._children){
-        //     console.log("case B")
-        //     return scale(d._children.length);
-        // }
-        // else{
-        //     console.log("case C")
-        //     return minRadius;
-        // }
+        return scale(d.weight);
     })
     .attr("fill", function(d){
         if (d.label)
