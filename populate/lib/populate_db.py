@@ -111,6 +111,3 @@ class create_data:
 					num = random.randint(0,3)
 					if (num is not 0):
 						self.populate_data.createTransaction(merchant, account)
-
-#p = populate()
-#print(type(p.getAllTransactionsByAccount(account="account_1")))
