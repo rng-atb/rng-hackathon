@@ -75,6 +75,11 @@ function get_node_label(d)
 
 }
 
+function get_random_length(width)
+{
+    return Math.random()*100 + 1;
+}
+
 // get the data
 console.log("{{ 'data_path' }}")
 d3.csv("{{ url_for('static', filename=data_path) }}", function(error, links) {
@@ -99,7 +104,7 @@ var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
-    .linkDistance(Math.random()*width)
+    .linkDistance(function(d){ get_random_length(width); })
     .charge(function(d){
         var charge = -300;
         if (d.index === 0) charge = 10 * charge;
