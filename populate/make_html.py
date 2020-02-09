@@ -14,13 +14,32 @@ html = """
 </head>
 
 </head>
+
 <body>
+<br>
+      <center>
+      <form action="gen_data.php" method="POST">
+      <!-- <div class="GenerateData"> -->
+      <label for="interestLabel"><b>Interest</b></label>
+      <select name="interestType">
+                <option value="Gaming">Gaming</option>
+                <option value="Learning">Learning</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Outdoors">Outdoors</option>
+                <option value="Travel">Travel</option>
+        </select>
+      <label for="weightLabel"><b>Weight</b></label>
+      <input type="text" placeholder="..." name="txtWeight" maxlength="16" required>
+
+    <input type="submit" class="btn btn-primary btn-lg" name="commit" value="Generate">
+    </center>
+  </form>
 	<table class="table">
 	  <thead class="thead-dark">
 		<tr>
 		  <th scope="col">Name</th>
-		  <th scope="col">Target</th>
 		  <th scope="col">Interest</th>
+		  <th scope="col">Weight</th>
 		</tr>
 	  </thead>
 """
@@ -34,7 +53,7 @@ write_row = """
 		</tr>
 	  </tbody>
 """
-	  
+
 html_close = """
 	</table>
 </body>
@@ -42,10 +61,10 @@ html_close = """
 """
 
 def writeToFile(value):
-	with open("index.html", "a") as f:
+	with open("/var/www/html/index.php", "a") as f:
 		f.write(value)
 
-def beginHTML(self):
+def beginHTML():
 	writeToFile(html)
 
 def createTable(name, target, interest):

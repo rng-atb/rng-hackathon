@@ -1,4 +1,12 @@
 # Prerequisites
+* Apache2
+```
+sudo apt install apache2
+```
+* PHP
+```
+sudo apt install php
+```
 * Python-dev
 ```
 sudo apt install python-dev
