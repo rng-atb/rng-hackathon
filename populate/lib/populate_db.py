@@ -74,11 +74,11 @@ class populate:
 		r = requests.post(url, json=body,headers=self.__HEADER)
 		if (r.status_code is not 201):
 			error = "Incorrect request! ({status_code})"
-			raise Exception(error.format(status_code=r.status_code)
+			raise Exception(error.format(status_code=r.status_code))
 		return r.text
 
 	def getAllTransactionsByAccount(self, bank_id=None, account=None):
-		self.__ACCOUNT = account if account is not None and self.ACCOUNTS is None else None
+		self.__ACCOUNT = account if account is not None and self.ACCOUNT is None else None
 
 		self.__BANK__ID = bank_id if self.__BANK__ID is not None and bank_id is not None else None
 
