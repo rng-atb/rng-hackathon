@@ -81,8 +81,8 @@ class Profile:
         return filteredList
 
     def createReportHtml(self, interest, weight):
-        if(os.path.exists("index.html")):
-            os.remove("index.html")
+        if(os.path.exists("index.php")):
+            os.remove("index.php")
         profiles = self.getInterestedProfiles(interest, weight)
         profiles.sort(key = lambda x:x['weight'], reverse = True)
         beginHTML()
