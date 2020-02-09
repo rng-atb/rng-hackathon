@@ -23,6 +23,9 @@ html = """
 		  <th scope="col">Interest</th>
 		</tr>
 	  </thead>
+"""
+
+write_row = """
 	  <tbody>
 		<tr>
 		  <td>{_name}</td>
@@ -39,11 +42,14 @@ html_close = """
 """
 
 def writeToFile(value):
-	with open("index.html", "w") as f:
+	with open("index.html", "a") as f:
 		f.write(value)
 
+def beginHTML(self):
+	writeToFile(html)
+
 def createTable(name, target, interest):
-	report = html.format(_name=name, _target=target, _interest=interest)
+	report = write_row.format(_name=name, _target=target, _interest=interest)
 	writeToFile(report)
 
 def closeHTML():
