@@ -91,6 +91,16 @@ class Profile:
 
         closeHTML()
 
+    def writeToCsv(self, filename):
+        if(os.path.exists(filename)):
+            os.remove(filename)
+        profiles = self.getProfile()
+        srcCol = [profile['source'] for profile in profiles]
+        targetCol = [profile['target'] for profile in profiles]
+        weightCol = [profile['weight'] for profile in profiles]
+        df = pandas.DataFrame(data={"source": srcCol, "target": targetCol, "weight": weightCol})
+        df.to_csv(filename, sep=',',index=False)
+        
     def convertToCsv(self):
         profiles = self.getProfile()
         srcCol = [profile['source'] for profile in profiles]
@@ -106,7 +116,7 @@ if __name__ == "__main__":
     profile = Profile()
     profile.populateProfile()
     #profile.createReportHtml(interest, weight)
-    profile.convertToCsv()
+    profile.writeToCsv()
     #profile.createReportHtml()
     #profile.writeToFile("profiles.json")
     #print(profile.getInterestedProfiles("Learning", 7))
