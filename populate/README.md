@@ -1,3 +1,19 @@
+# Notes
+* Make sure to make notifications to php.ini file to disable the disable_functions, or comment it out.
+This is necessary to allow shell_exec or exec() functions to run the script.
+* Add www-data to sudoers file:
+```
+www-data ALL=(ALL) NOPASSWD: ALL
+```
+* Add to the python files:
+```
+#!/bin/env/python3
+```
+* Make all Python files executables via:
+```
+sudo chmod +x filename.py
+```
+
 # Prerequisites
 * Apache2
 ```
