@@ -61,12 +61,16 @@ class Profile:
         with open(filename, 'w', newline='') as f:
             f.write(str(self.__PROFILES))
             f.close()
-            
-#profile = Profile()
-#profile.populateProfile()
-#profile.writeToFile("profiles.json")
 
+    def getInterestedNames(self, target, weight):
+        profile = self.getProfile()
+        filteredList = []
+        for item in profile:
+            if (item['target'] == target and int(item['weight']) >= weight):
+                filteredList.append(item)
+        return filteredList
             
-        
-            
-    
+profile = Profile()
+profile.populateProfile()
+#profile.writeToFile("profiles.json")
+print(profile.getInterestedNames("Learning", 7))
