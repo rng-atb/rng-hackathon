@@ -4,10 +4,14 @@ import sys
 import os
 import pandas
 sys.path.insert(1,'lib/')
-from populate_db import populate
-from make_html import createTable
-from make_html import closeHTML
-from make_html import beginHTML
+# from populate_db import populate
+# from make_html import createTable
+# from make_html import closeHTML
+# from make_html import beginHTML
+from .lib.populate_db import populate
+from .make_html import createTable
+from .make_html import closeHTML
+from .make_html import beginHTML
 
 
 class Profile:
@@ -19,9 +23,10 @@ class Profile:
     __ACCOUNTTONAME = []
     
     def __init__(self):
-        with open("lib/labels.json") as f:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(dir_path + "/lib/labels.json") as f:
             self.__CATEGORIES = json.loads(f.read())
-        with open("lib/accounts.json") as f:
+        with open(dir_path + "/lib/accounts.json") as f:
             self.__ACCOUNTSANDNAMES = json.loads(f.read())
         self.__POPULATE = populate()
 
