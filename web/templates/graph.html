@@ -92,16 +92,16 @@ links.forEach(function(link) {
     nodes[link.target.name]["label"] = true;
 });
 
-var width = 1080,
-    height = 800;
+var width = 1200,
+    height = 1080;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
-    .linkDistance(width/4)
+    .linkDistance(Math.random()*width)
     .charge(function(d){
-        var charge = -500;
+        var charge = -300;
         if (d.index === 0) charge = 10 * charge;
         return charge;
     })
