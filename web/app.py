@@ -11,7 +11,7 @@ sys.path.append("../common")
 #import your module stored in '../common'
 from ..populate.back_end import Profile
 
-global profile
+# global prof
 
 app = Flask(__name__)
 
@@ -48,8 +48,10 @@ def graph():
 
 @app.route('/populate')
 def populate():
-    global profile
-    print(profile)
+    profile = Profile()
+    return render_template('graph.html', data_path="data/account.csv")
+    # global prof
+    # print(prof)
     #profile = Profile()
     #profile.populateProfile()
     #profile.writeToCsv("data.csv")
@@ -108,5 +110,5 @@ def demo4():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    global profile
-    profile = Profile()
+    # global prof
+    
