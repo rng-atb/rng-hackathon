@@ -1,8 +1,13 @@
 import json
 import csv
 import sys
+import os
+import pandas
 sys.path.insert(1,'lib/')
 from populate_db import populate
+from make_html import createTable
+from make_html import closeHTML
+from make_html import beginHTML
 
 
 class Profile:
@@ -62,15 +67,39 @@ class Profile:
             f.write(str(self.__PROFILES))
             f.close()
 
-    def getInterestedNames(self, target, weight):
+    def getInterestedProfiles(self, target, weight):
         profile = self.getProfile()
         filteredList = []
         for item in profile:
             if (item['target'] == target and int(item['weight']) >= weight):
                 filteredList.append(item)
         return filteredList
+
+    def createReport(self):
+        if(os.path.exists("index.html")):
+            os.remove("index.html")
+        profiles = self.getInterestedProfiles("Learning", 1)
+        profiles.sort(key = lambda x:x['weight'], reverse = True)
+        print(profiles)
+        beginHTML()
+        for profile in profiles:
+            createTable(profile['source'], profile['target'], profile['weight'])
+
+        closeHTML()
+
+    def writeToCsv(self, filename):
+        if(os.path.exists(filename)):
+            os.remove(filename)
+        profiles = self.getProfile()
+        srcCol = [profile['source'] for profile in profiles]
+        targetCol = [profile['target'] for profile in profiles]
+        weightCol = [profile['weight'] for profile in profiles]
+        df = pandas.DataFrame(data={"source": srcCol, "target": targetCol, "weight": weightCol})
+        df.to_csv(filename, sep=',',index=False)
             
-profile = Profile()
-profile.populateProfile()
+#profile = Profile()
+#profile.populateProfile()
+#profile.writeToCsv("data.csv")
+#profile.createReport()
 #profile.writeToFile("profiles.json")
-print(profile.getInterestedNames("Learning", 7))
+#print(profile.getInterestedProfiles("Learning", 7))
