@@ -83,7 +83,7 @@ class populate:
 		r = requests.get(url, headers=self.__HEADER)
 		if (r.status_code is not 200):
 			raise Exception("Incorrect request!" + str(r.status_code))
-		return (r.text).strip('][').split(', ')
+		return json.dumps(r.text)
 
 class create_data:
 	label_location = "labels.json"
