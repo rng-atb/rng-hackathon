@@ -1,8 +1,13 @@
 import json
 import csv
 import sys
+import os
+import pandas
 sys.path.insert(1,'lib/')
 from populate_db import populate
+from make_html import createTable
+from make_html import closeHTML
+from make_html import beginHTML
 
 
 class Profile:
@@ -62,15 +67,44 @@ class Profile:
             f.write(str(self.__PROFILES))
             f.close()
 
-    def getInterestedNames(self, target, weight):
+    def getInterestedProfiles(self, target, weight):
         profile = self.getProfile()
         filteredList = []
         for item in profile:
             if (item['target'] == target and int(item['weight']) >= weight):
                 filteredList.append(item)
         return filteredList
-            
-profile = Profile()
-profile.populateProfile()
-#profile.writeToFile("profiles.json")
-print(profile.getInterestedNames("Learning", 7))
+
+    def createReportHtml(self, interest, weight):
+        if(os.path.exists("index.html")):
+            os.remove("index.html")
+        profiles = self.getInterestedProfiles(interest, weight)
+        profiles.sort(key = lambda x:x['weight'], reverse = True)
+        print(profiles)
+        beginHTML()
+        for profile in profiles:
+            createTable(profile['source'], profile['target'], profile['weight'])
+
+        closeHTML()
+
+    def writeToCsv(self, filename):
+        if(os.path.exists(filename)):
+            os.remove(filename)
+        profiles = self.getProfile()
+        srcCol = [profile['source'] for profile in profiles]
+        targetCol = [profile['target'] for profile in profiles]
+        weightCol = [profile['weight'] for profile in profiles]
+        df = pandas.DataFrame(data={"source": srcCol, "target": targetCol, "weight": weightCol})
+        df.to_csv(filename, sep=',',index=False)
+
+if __name__ == "__main__":
+    interest = sys.argv[1]
+    weight = sys.argv[2]
+      
+    profile = Profile()
+    profile.populateProfile()
+    profile.createReportHtml(interest, weight)
+    #profile.writeToCsv("data.csv")
+    #profile.createReportHtml()
+    #profile.writeToFile("profiles.json")
+    #print(profile.getInterestedProfiles("Learning", 7))
