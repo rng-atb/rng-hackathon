@@ -79,12 +79,10 @@ class populate:
 
 	def getAllTransactionsByAccount(self, bank_id=None, account=None):
 		self.__ACCOUNT = account
-		self.__BANK__ID = bank_id
 		url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNT)
 		r = requests.get(url, headers=self.__HEADER)
-
 		if (r.status_code is not 200):
-			raise Exception("Incorrect request!")
+			raise Exception("Incorrect request!" + str(r.status_code))
 		return r.text
 
 class create_data:
@@ -114,5 +112,3 @@ class create_data:
 					if (num is not 0):
 						self.populate_data.createTransaction(merchant, account)
 
-#p = populate()
-#print(p.getAllTransactionsByAccount(account="account_1"))
