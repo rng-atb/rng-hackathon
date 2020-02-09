@@ -4,10 +4,14 @@ import sys
 import os
 import pandas
 sys.path.insert(1,'lib/')
-from populate_db import populate
-from make_html import createTable
-from make_html import closeHTML
-from make_html import beginHTML
+# from populate_db import populate
+# from make_html import createTable
+# from make_html import closeHTML
+# from make_html import beginHTML
+from .lib.populate_db import populate
+from .make_htlm import createTable
+from .make_htlm import closeHTML
+from .make_htlm import beginHTML
 
 
 class Profile:
