@@ -78,12 +78,9 @@ class populate:
 		return r.text
 
 	def getAllTransactionsByAccount(self, bank_id=None, account=None):
-		self.__ACCOUNT = account if account is not None and self.__ACCOUNT is None else None
-
-		self.__BANK__ID = bank_id if self.__BANK__ID is not None and bank_id is not None else None
-
+		self.__ACCOUNT = account
+		self.__BANK__ID = bank_id
 		url = self.__BASE__URL + "banks/{BANK_ID}/accounts/{ACCOUNT_ID}/owner/transactions".format(BANK_ID=self.__BANK__ID, ACCOUNT_ID=self.__ACCOUNT)
-
 		r = requests.get(url, headers=self.__HEADER)
 
 		if (r.status_code is not 200):
@@ -116,3 +113,6 @@ class create_data:
 					num = random.randint(0,3)
 					if (num is not 0):
 						self.populate_data.createTransaction(merchant, account)
+
+#p = populate()
+#print(p.getAllTransactionsByAccount(account="account_1"))
