@@ -1,0 +1,22 @@
+[
+  {
+    "source": "Account1",
+    "target": "Learning",
+    "value": 10
+  },
+  {
+    "source": "Account1",
+    "target": "Outdoors",
+    "value": 20 
+  },
+  {
+    "source": "Account2",
+    "target": "Gaming",
+    "value": 10
+  },
+  {
+    "source": "Account3",
+    "target": "Learning",
+    "value": 10
+  }
+]

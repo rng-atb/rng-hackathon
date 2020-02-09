@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<style>
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+/* Could not figure out how to ovveride so removed for now */
+/*circle {
+  fill: #ff0000;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}*/
+
+/*label_circle {
+  fill: #ccc;
+  stroke: #ff0000;
+  stroke-width: 1.5px;
+}*/
+
+text {
+  fill: #000;
+  font: 20px sans-serif;
+  pointer-events: none;
+}
+
+</style>
+<body>
+<script>
+
+// Node scaling function
+// https://stackoverflow.com/a/26888487
+var minRadius = 10;
+var maxRadius = 15;
+var scale = d3.scale.linear().range([minRadius,maxRadius]);
+
+function get_radius(d)
+{
+    if (d.label)
+    {
+        return scale(d.weight);
+    }
+    else
+    {
+        return 8;
+    }
+}
+
+function get_node_colour(d)
+{
+    if (d.label)
+    {
+        return "#009999";
+    }
+    else
+    {
+        return "#ccff99";
+    }
+}
+
+function get_node_label(d)
+{
+    if(d.label)
+    {
+        return d.name;
+    }
+    else
+    {
+        return "";
+    }
+
+}
+
+// get the data
+console.log("{{ 'data_path' }}")
+d3.csv("{{ url_for('static', filename=data_path) }}", function(error, links) {
+
+var nodes = {};
+
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+    link.source = nodes[link.source] || 
+        (nodes[link.source] = {name: link.source});
+    link.target = nodes[link.target] || 
+        (nodes[link.target] = {name: link.target});
+    link.value = +link.value;
+    nodes[link.source.name]["label"] = false;
+    nodes[link.target.name]["label"] = true;
+});
+
+var width = 1080,
+    height = 800;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([width, height])
+    .linkDistance(width/4)
+    .charge(function(d){
+        var charge = -500;
+        if (d.index === 0) charge = 10 * charge;
+        return charge;
+    })
+    .on("tick", tick)
+    .start();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// build the arrow.
+svg.append("svg:defs").selectAll("marker")
+    .data(["end"])      // Different link/path types can be defined here
+  .enter().append("svg:marker")    // This section adds in the arrows
+    .attr("id", String)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("svg:path")
+    .attr("d", "M0,-5L10,0L0,5");
+
+// add the links and the arrows
+var path = svg.append("svg:g").selectAll("path")
+    .data(force.links())
+  .enter().append("svg:path")
+//    .attr("class", function(d) { return "link " + d.type; })
+    .attr("class", "link")
+    .attr("marker-end", "url(#end)");
+
+// define the nodes
+var node = svg.selectAll(".node")
+    .data(force.nodes())
+  .enter().append("g")
+    .attr("class", "node")
+    .call(force.drag);
+
+// add the nodes
+node.append("circle")
+    .attr("r", function(d) { return get_radius(d); })
+    .attr("fill", function(d) { return get_node_colour(d); })
+
+// add the text 
+node.append("text")
+    .attr("x", function(d) { return get_radius(d); })
+    .attr("dy", ".35em")
+    .text(function(d) { return get_node_label(d)});
+
+// add the curvy lines
+function tick() {
+    path.attr("d", function(d) {
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = 0;
+            // dr = Math.sqrt(dx * dx + dy * dy);
+        return "M" + 
+            d.source.x + "," + 
+            d.source.y + "A" + 
+            dr + "," + dr + " 0 0,1 " + 
+            d.target.x + "," + 
+            d.target.y;
+    });
+
+    node
+        .attr("transform", function(d) { 
+  	    return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+});
+
+</script>
+</body>
+</html>

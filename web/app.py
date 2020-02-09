@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from pusher import Pusher
 
 app = Flask(__name__)
@@ -12,8 +12,39 @@ cluster='us3',
 ssl=True)
 
 @app.route('/')
+@app.route('/index')
+@app.route('/index.html')
 def index():
     return render_template('index.html')
+
+@app.route('/our_endpoint', methods=['GET'])
+def our_endpoint():
+    some_arg = request.args.get("some_arg")
+    if some_arg is None:
+        print("arg some_arg was None")
+        return Response(status=400)
+    if some_arg == "option1":
+        return Response(status=200)        
+    else:
+        return Response(status=200)
+
+@app.route('/graph', methods=['GET'])
+def graph():
+    path = request.args.get("filepath")
+    print("the path is: {0}".format(path))
+    return render_template('graph.html', data_path=path)
+
+@app.route('/demo1')
+def demo1():
+    return render_template('graph.html', data_path="data/account.csv")
+
+@app.route('/demo2')
+def demo2():
+    return render_template('graph.html', data_path="data/account.json")
+
+@app.route('/demo3')
+def demo3():
+    return render_template('graph.html', data_path="data/force.csv")
 
 @app.route('/dashboard')
 def dashboard():
