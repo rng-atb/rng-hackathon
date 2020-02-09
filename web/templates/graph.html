@@ -38,121 +38,16 @@ d3.csv("{{ url_for('static', filename=data_path) }}", function(error, links) {
 
 var nodes = {};
 
-
-
-// // Recursively get number of children
-// // https://stackoverflow.com/a/26890322
-// var bubble_up_total_children = function(node) {
-//   var child, _i, _len, _ref;
-//   if (node.children && node.children.length > 0) {
-//     _ref = node.children;
-//     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-//       child = _ref[_i];
-//       bubble_up_total_children(child);
-//     }
-//     node.total_children = node.children.length + node.children.reduce(function(a, b) {
-//       return a.total_children + b.total_children;
-//     });
-//   } else {
-//     node.total_children = 0;
-//   }
-// };
-
-// bubble_up_total_children(root);
-var my_nodes = {};
-// console.log("my_nodes outside: " + my_nodes)
-// my_nodes.push("sample string")
-// console.log("my_nodes outside: " + my_nodes)
-
-
 // Compute the distinct nodes from the links.
 links.forEach(function(link) {
-    console.log("begin link loop");
-    console.log("my_nodes is: ");
-    console.log(my_nodes);
-
-    // link.source = nodes[link.source] || (nodes[link.source] = {name: link.source} && nodes[link.source]["label"] = {"true": truth_obj});
-
     link.source = nodes[link.source] || 
         (nodes[link.source] = {name: link.source});
     link.target = nodes[link.target] || 
         (nodes[link.target] = {name: link.target});
     link.value = +link.value;
-    console.log("neel why")
-    console.log(nodes[link.source.name]);
-    console.log(nodes);
     nodes[link.source.name]["label"] = false;
     nodes[link.target.name]["label"] = true;
-    // nodes[link.target]["label"] = true;
-    
-    // console.log("link.source: ")
-    // console.log(link.source.name)
-    // console.log("link.target: ")
-    // console.log(link.target)
-    // console.log("link.target: " + link.target)
-    // console.log("link.value: " + link.value)
-    // console.log("nodes[link.source]: " + nodes[link.source])
-    
-    // if (!my_nodes.includes(link.source))
-    // {
-    my_source_key = link.source.name;
-    my_target_key = link.target.name;
-
-    if (!(my_source_key in my_nodes))
-    {
-        console.log(my_source_key + " not yet known, adding");
-        my_nodes[my_source_key] = {};
-        my_nodes[my_source_key]["out"] = 1;
-        my_nodes[my_source_key]["in"] = 0;
-    }
-    else
-    {
-        // if(!("out" in my_nodes[my_source_key]))
-        // {
-        //     my_nodes[my_source_key] = {};
-        //     my_nodes[my_source_key]["out"] = 1;
-        // }
-        console.log(my_source_key + " already a source with value " + my_nodes[my_source_key]["out"] + ", incrementing");        
-        my_nodes[my_source_key]["out"] += 1;
-    }
-    // my_nodes[links.source] = (my_nodes[links.source]["out"]+1) || 1;
-        
-    //     console.log("source not in list yet, adding: ");
-    //     console.log(link.source);
-    //     my_nodes.push(link.source);
-    //     console.log("added, my_nodes: " + my_nodes);
-    // }
-    // if (!my_nodes.includes(link.target))
-    if (!(my_target_key in my_nodes))
-    {
-        console.log(my_target_key + " not yet known, adding");        
-        my_nodes[my_target_key] = {}; 
-        my_nodes[my_target_key]["out"] = 0;               
-        my_nodes[my_target_key]["in"] = 1;
-    }
-    else
-    {
-        console.log(my_target_key + " already a target with value " + my_nodes[my_target_key]["in"] + ", incrementing");                
-        my_nodes[my_target_key]["in"] += 1;
-        
-    }
-    // {
-    // my_nodes[links.source] = (my_nodes[links.source]["in"]+1) || 1;
-        
-    //     console.log("target not in list yet, adding " + link.target);  
-    //     my_nodes.push(link.target);
-    //     console.log("added, my_nodes: " + my_nodes);
-    // }
-
-    
-
 });
-
-console.log(my_nodes);
-console.log(nodes);
-
-// my_nodes.push("cat");
-// console.log(my_nodes);
 
 var width = 960,
     height = 500;
@@ -198,38 +93,6 @@ var node = svg.selectAll(".node")
   .enter().append("g")
     .attr("class", "node")
     .call(force.drag);
-
-
-
-// var node = svg.selectAll(".node")
-//     .data(graph.nodes)
-//     .attr("r", function(d){
-//         if (d.value === myUniqueId){
-//           return 3;
-//     } else {
-//           return 10;
-//     }
-// })
-
-// Recursively get number of children
-// https://stackoverflow.com/a/26890322
-var bubble_up_total_children = function(node) {
-  var child, _i, _len, _ref;
-  if (node.children && node.children.length > 0) {
-    _ref = node.children;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      child = _ref[_i];
-      bubble_up_total_children(child);
-    }
-    node.total_children = node.children.length + node.children.reduce(function(a, b) {
-      return a.total_children + b.total_children;
-    });
-  } else {
-    node.total_children = 0;
-  }
-};
-
-bubble_up_total_children(nodes);
 
 // Node scaling function
 // https://stackoverflow.com/a/26888487
