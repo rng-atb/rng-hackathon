@@ -9,11 +9,18 @@ path.link {
   stroke-width: 1.5px;
 }
 
-circle {
-  fill: #ccc;
+/* Could not figure out how to ovveride so removed for now */
+/*circle {
+  fill: #ff0000;
   stroke: #fff;
   stroke-width: 1.5px;
-}
+}*/
+
+/*label_circle {
+  fill: #ccc;
+  stroke: #ff0000;
+  stroke-width: 1.5px;
+}*/
 
 text {
   fill: #000;
@@ -26,7 +33,7 @@ text {
 <script>
 
 // get the data
-d3.csv("{{ url_for('static', filename='data/force.csv') }}", function(error, links) {
+d3.csv("{{ url_for('static', filename='data/account.csv') }}", function(error, links) {
 
 var nodes = {};
 
@@ -62,11 +69,21 @@ links.forEach(function(link) {
     console.log("begin link loop");
     console.log("my_nodes is: ");
     console.log(my_nodes);
+
+    // link.source = nodes[link.source] || (nodes[link.source] = {name: link.source} && nodes[link.source]["label"] = {"true": truth_obj});
+
     link.source = nodes[link.source] || 
         (nodes[link.source] = {name: link.source});
     link.target = nodes[link.target] || 
         (nodes[link.target] = {name: link.target});
     link.value = +link.value;
+    console.log("neel why")
+    console.log(nodes[link.source.name]);
+    console.log(nodes);
+    nodes[link.source.name]["label"] = false;
+    nodes[link.target.name]["label"] = true;
+    // nodes[link.target]["label"] = true;
+    
     // console.log("link.source: ")
     // console.log(link.source.name)
     // console.log("link.target: ")
@@ -131,6 +148,8 @@ links.forEach(function(link) {
 });
 
 console.log(my_nodes);
+console.log(nodes);
+
 // my_nodes.push("cat");
 // console.log(my_nodes);
 
@@ -233,6 +252,16 @@ node.append("circle")
         //     console.log("case C")
         //     return minRadius;
         // }
+    })
+    .attr("fill", function(d){
+        if (d.label)
+        {
+            return "#009999";
+        }
+        else
+        {
+            return "#ccff99";
+        }
     })
 
 // add the text 
