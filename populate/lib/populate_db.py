@@ -112,5 +112,5 @@ class create_data:
 					if (num is not 0):
 						self.populate_data.createTransaction(merchant, account)
 
-p = populate()
-print(type(p.getAllTransactionsByAccount(account="account_1")))
+#p = populate()
+#print(type(p.getAllTransactionsByAccount(account="account_1")))
