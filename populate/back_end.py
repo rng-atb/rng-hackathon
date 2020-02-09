@@ -1,4 +1,5 @@
 import json
+import csv
 import sys
 sys.path.insert(1,'lib/')
 from populate_db import populate
@@ -56,10 +57,14 @@ class Profile:
                 return None
         raise Exception("Cant find label for merchant: " + merchant)
 
-
+    def writeToFile(self, filename):
+        with open(filename, 'w', newline='') as f:
+            f.write(str(self.__PROFILES))
+            f.close()
+            
 #profile = Profile()
 #profile.populateProfile()
-#print(profile.getProfile())
+#profile.writeToFile("profiles.json")
 
             
         
