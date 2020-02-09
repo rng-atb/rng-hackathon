@@ -24,7 +24,7 @@ path.link {
 
 text {
   fill: #000;
-  font: 10px sans-serif;
+  font: 20px sans-serif;
   pointer-events: none;
 }
 
@@ -49,15 +49,19 @@ links.forEach(function(link) {
     nodes[link.target.name]["label"] = true;
 });
 
-var width = 960,
-    height = 500;
+var width = 1080,
+    height = 800;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
-    .linkDistance(60)
-    .charge(-300)
+    .linkDistance(width/4)
+    .charge(function(d){
+        var charge = -500;
+        if (d.index === 0) charge = 10 * charge;
+        return charge;
+    })
     .on("tick", tick)
     .start();
 
@@ -102,7 +106,14 @@ var scale = d3.scale.linear().range([minRadius,maxRadius]);
 // add the nodes
 node.append("circle")
     .attr("r", function(d){
-        return scale(d.weight);
+        if (d.label)
+        {
+            return scale(d.weight);
+        }
+        else
+        {
+            return 5;
+        }
     })
     .attr("fill", function(d){
         if (d.label)
@@ -126,7 +137,8 @@ function tick() {
     path.attr("d", function(d) {
         var dx = d.target.x - d.source.x,
             dy = d.target.y - d.source.y,
-            dr = Math.sqrt(dx * dx + dy * dy);
+            dr = 0;
+            // dr = Math.sqrt(dx * dx + dy * dy);
         return "M" + 
             d.source.x + "," + 
             d.source.y + "A" + 
